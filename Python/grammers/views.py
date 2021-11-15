@@ -256,7 +256,71 @@ class GrammerView(View):
         13)  chr() : 아스키 넘버에 대응되는 문자 출력(A ~ Z : 65 ~ 90, a ~ z : 97~122)
         tmp=65
         print(chr(tmp))
-    
+        
+        
+        [리스트와 내장함수]
+        ======================
+        - 리스트 : 변수 하나하나를 나열하여 인덱스를 붙인 것. a1,a2,a3.. =>a[0], a[1], a[2]
+        1) 빈리스트 만들기
+                a = []
+                print(a)
+                b=list()
+                print(b)       
+                =>[], [] 
+        
+        
+        2) 값이 있는 리스트 만들기 
+            (1) a = [1,2,3,4,5]
+            
+            (2) b = list(range(1,11))
+            
+            (3) c=a+b
+        
+        
+        3) a.append(6) # 리스트 멘 마지막에 값 6을 추가
+            print(a)
+        
+        4) a.insert(3,7)# 3번 인덱스에 7을 추가, 나머지는 뒤로 밀림
+            print(a)
+        
+        5) a.pop() # 리스트에서 마지막 값을 제거
+            print(a)
+        
+        6) a.pop(3) # 3번 인덱스의 값을 제거
+            print(a)
+        
+        7) a.remove(4) # 리스트에서 값 4 를 제거, 앞으로 당겨짐
+            print(a)
+        
+        8) a.index(5) # 5라는 값이 몇번 인덱스에 있는지
+            print(a.index(5))
+            
+            a=list(range(1,11))
+        
+        9) print(sum(a)) # 1~10의 모든 수의 합
+        
+        10) print(max(a)) # 최대값
+        
+        11) print(min(a)) # 최소값 
+            print(min(7,5)) # 인자들 중 최소값       
+            print(min(7,3,5)) # 인자들 중 최소값       
+            print(max(7,5)) # 인자들 중 최대값    
+        
+        12) 무작위로 섞기
+        
+            import random as r
+            
+            r.shuffle(a) # 무작위로 섞기
+            print(a)   
+        
+        13) a.sort() #오름차순
+            print(a)   
+        
+        14) a.sort(reverse=True) # 내림차순
+            print(a)   
+
+        15) a.clear() # 빈리스트로 만들기
+            print(a)   
         '''
         
         
