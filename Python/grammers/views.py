@@ -172,6 +172,91 @@ class GrammerView(View):
         * *
         *      
         
+        
+        [ 문자열과 내장함수 ]
+        ================================
+           
+        1) upper()  : 문자열 모두 대문자 전환 
+            msg = "It is Time"
+            print(msg.upper())      
+            => IT IS TIME   
+        2) lower()  :  문자열 모두 소문자 전환
+            msg = "It is Time"
+            print(msg.lower())   
+            => it is time   
+        3) find('T') : 처음 발견되는 T의 인덱스 번호
+            msg = "It is Time"
+            print(msg.find('T'))  
+            => 6 
+        4) count('T') : T의 갯수
+            msg = "It is Time"
+            print(msg.count('T'))  
+            => 1
+        5) [:2] : 0~1인덱스까지의 문자열 추출
+            msg = "It is Time"
+            print(msg[:2])  
+            => It
+        6) [3:5] : 3~4덱스까지의 문자열 추출
+            msg = "It is Time"
+            print(msg[3:5])  
+            => is
+        7) len(msg) : 문자열의 길이(공백 포함)    
+            msg = "It is Time"
+            for i in range(len(msg)):
+                print(i, end=' ')
+            => 0 1 2 3 4 5 6 7 8 9
+        9) 문자열 리스트의 문자 하나하나 반환
+        
+        (방법1)
+            msg = "It is Time"
+            for i in range(len(msg)):
+                print(msg[i], end=' ')
+            print()
+            =>I t   i s   T i m e
+        
+        (방법2)
+            msg = "It is Time"
+            for x in msg:
+                print(x, end=' ')
+            print()
+            =>I t   i s   T i m e
+        
+        10) isupper() : 대문자면 true // 대문자만 출력
+            msg = "It is Time"
+            for x in msg:
+                if x.isupper():
+                    print(x, end=' ')    
+            =>I T
+        
+        11) islower() : 소문자면 true // 소문자만 출력
+            msg = "It is Time"
+            for x in msg:
+                if x.islower():
+                    print(x, end=' ')    
+            =>t i s i m e
+            
+        11) isalpha() : 공백은 X, 오직 알파벳일 때만
+        msg = "It is Time"
+        for x in msg:
+            if x.isalpha():
+                print(x, end='')    
+        =>ItisTime
+        
+        12)  ord() : 아스키 넘버 출력(A ~ Z : 65 ~ 90, a ~ z : 97~122)
+        
+        tmp='AZ'
+        for x in tmp:
+            print(ord(x))
+            
+        tmp='az'
+        for x in tmp:
+            print(ord(x))
+            
+        
+        13)  chr() : 아스키 넘버에 대응되는 문자 출력(A ~ Z : 65 ~ 90, a ~ z : 97~122)
+        tmp=65
+        print(chr(tmp))
+    
         '''
         
         
