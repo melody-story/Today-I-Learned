@@ -479,6 +479,32 @@ class GrammerView(View):
         for y in a:
             if isPrime(y):
                 print(y, end=' ')
+        
+        
+            
+        [람다함수]
+        ====================
+        - 람다함수 : 익명의 함수 또는 표현식
+        
+        def plus_one(x):
+            return x+1
+        print(plus_one(1))
+        =>2
+        
+        # 람다함수(익명의 함수)로 표현하기(변수에 담아서 호출해주어야함)
+        plus_two=lambda x: x+2
+        print(plus_two(1))
+        =>3
+        
+        
+        * map(함수, 함수를 적용할 자료)
+            a=[1,2,3]
+            print(list(map(plus_one, a)))
+            =>[2, 3, 4]
+        
+        * 함수 이름이 필요없이 익명의 함수를 사용하여 바로 사용할수있음.
+            print(list(map(lambda x: x+1, a))) 
+            =>[2, 3, 4]
         '''
             
         return JsonResponse({"MESSAGE": "Hello"}, status=200)
