@@ -321,12 +321,90 @@ class GrammerView(View):
 
         15) a.clear() # 빈리스트로 만들기
             print(a)   
+            
+        
+        리스트와 내장함수(2)
+        ========================
+        a=[23, 12, 36, 53, 19]
+        print(a[:3])
+        print(a[1:4])
+        
+        1.  리스트 값 출력
+        =====================
+        방법 1)
+            for i in range(len(a)):
+                print(a[i], end=' ')
+            print()
+            =>23 12 36 53 19
+        
+            for x in a:
+                print(x, end=' ')
+            print()
+            =>23 12 36 53 19
+        
+        방법 2)
+            for x in a:
+                if x%2==1:
+                    print(x, end=' ')
+            print()
+        
+        방법 3) enumerate()
+            for x in enumerate(a):#(인덱스, value)의 형태로 튜플 반환
+                print(x)
+            =>  (0, 23)
+                (1, 12)
+                (2, 36)
+                (3, 53)
+                (4, 19)
+        
+            ** 튜플의 구조는 리스트와 같으나, 값을 변경할 수 없다.
+                a = [23, 12, 36, 53, 19]
+                a[0] = 43
+                print(a)
+                =>[43, 12, 36, 53, 19]
+                
+                a = (23, 12, 36, 53, 19)
+                a[0] = 43
+                =>TypeError: 'tuple' object does not support item assignment
+            
+        방법 4) x[0], x[1]
+            for x in enumerate(a):
+                print(x[0], x[1]) # x=(인덱스, value)이므로 x[0]은 인덱스 , x[1]은 값 
+            =>
+            0 23
+            1 12
+            2 36
+            3 53
+            4 19
+        
+        방법 5) 가장 많이 쓰는 enumerate 사용
+            for index, value in enumerate(a):
+                print(index, value)
+            print()
+            =>
+            0 23
+            1 12
+            2 36
+            3 53
+            4 19
+        
+        방법 6) 가장 많이 쓰는 enumerate 사용
+            if all(60>x for x in a): # 모두 충족하면 참
+                print("YES")
+            else:
+                print("NO")
+
+            if any(15>x for x in a): # 한가지라도 충족하면 참
+                print("YES")
+            else:                    # 모두가 충족안할때, 거짓
+                print("NO")
+            
         '''
         
         
-        
-        
-        
+            
+            
+            
         return JsonResponse({"MESSAGE": "Hello"}, status=200)
 
 
