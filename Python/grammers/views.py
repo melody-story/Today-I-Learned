@@ -107,7 +107,34 @@ class GrammerView(View):
             
             => 결과 : 3, 5, 7, 9
             
-      
+            
+        
+        [ 반복문을 이용한 문제풀이 ]
+        ==========================
+        1) 1부터 N까지 홀수 출력하기
+            input() :  값을 입력 받는다. ** 타입은 문자가 되므로 연산을 하고싶다면, int형으로 바꿔주어야함.
+            
+            n=int(input()) 
+            for i in range(1, n+1):
+                if i%2==1:
+                    print(i)
+                
+        2) 1부터 N까지의 합 구하기
+        
+            sum=0
+            n=int(input()) 
+            for i in range(1, n+1):
+                sum=sum+i
+            print(sum)
+        
+        3) N의 약수 출력하기// 약수 : 1 부터 나 자신의 수까지, 나 자신과 나눠서 0이 되는 어떤 수 .
+        
+        n=int(input()) 
+        for i in range(1,n+1):
+            if n%i==0:
+                print(i, end=' ')
+        => 1 2 3 6 7 14 21 42
+    
         '''
         
         
