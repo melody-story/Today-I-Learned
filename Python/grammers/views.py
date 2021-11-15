@@ -454,35 +454,32 @@ class GrammerView(View):
         [함수 만들기]
         =================
         # 함수는 값을 return 하며, 함수를 종료 한다.
-        def add(a,b):
-            c=a+b
-            return c
-        print(add(3,2))
-        =>5
+            def add(a,b):
+                c=a+b
+                return c
+            print(add(3,2))
+            =>5
         # 파이썬에서는 2개이상의 값을 튜플로 반환할 수 있다.
-        def add(a,b):
-            c=a+b
-            d=a-b
-            return c, d
-        print(add(3,2))
-        =>(5, 1)
+            def add(a,b):
+                c=a+b
+                d=a-b
+                return c, d
+            print(add(3,2))
+            =>(5, 1)
         
         # 소수(나누어 떨어지지 않는 수 )만 출력하는 함수 만들기(1~자기자신까지의 수중 1,과 자기자신을 제외하고 나누어서 떨어지지 않는 수)
-        def isPrime(x):
-            for i in range(2,x):
-                if x%i==0:
-                    return False # 여기서 함수가 종료됨.
-            return True
+            def isPrime(x):
+                for i in range(2,x):
+                    if x%i==0:
+                        return False # 여기서 함수가 종료됨.
+                return True
 
 
         a=[12, 13, 7, 9, 19]
         for y in a:
             if isPrime(y):
                 print(y, end=' ')
-        
         '''
-        
-        
             
         return JsonResponse({"MESSAGE": "Hello"}, status=200)
 
