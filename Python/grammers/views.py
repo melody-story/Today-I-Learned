@@ -134,7 +134,44 @@ class GrammerView(View):
             if n%i==0:
                 print(i, end=' ')
         => 1 2 3 6 7 14 21 42
-    
+        
+       
+        
+        [ 중첩 반복묵(2중 for 문) ]
+        ============================
+        for i in range(5):
+            for j in range(5):
+                print('*', end=' ')
+            print()                                                                                
+        
+        * * * * *
+        * * * * *
+        * * * * *
+        * * * * *
+        * * * * *
+        
+        for i in range(5):
+            for j in range(i+1):
+                print('*', end=' ')
+            print()    
+                        
+        *
+        * *
+        * * *
+        * * * *
+        * * * * *
+        
+        for i in range(5):
+            for j in range(5-i):
+                print('*', end=' ')
+            print()        
+            
+        * * * * *
+        * * * *
+        * * *
+        * *
+        *      
+        
         '''
         
         
