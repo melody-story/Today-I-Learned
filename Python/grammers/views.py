@@ -697,5 +697,120 @@ class ProgrammersExample2View(View):
                 return [i for i, y in enumerate(L) if y == x] # 조건문이 만족 할 떄, i를 리스트에 담는다.
             else:
                 return [-1]
+            
+        
         
         return JsonResponse({"RESULT": solution1(L,x)}, status=200)
+    
+  
+# 3. 정렬, 탐색 알고리즘 풀이
+class ProgrammersExample3View(View):
+    
+    def get (self, request):
+        '''
+        (03) 이진탐색
+        
+        문제 설명
+        리스트 L 과, 그 안에서 찾으려 하는 원소 x 가 인자로 주어질 때, 
+        x 와 같은 값을 가지는 원소의 인덱스를 리턴하는 함수 solution() 을 완성하세요. 
+        만약 리스트 L 안에 x 와 같은 값을 가지는 원소가 존재하지 않는 경우에는 -1 을 리턴합니다. 
+        리스트 L 은 자연수 원소들로 이루어져 있으며, 크기 순으로 정렬되어 있다고 가정합니다. 
+        또한, 동일한 원소는 두 번 이상 나타나지 않습니다.
+
+        예를 들어,
+        L = [2, 3, 5, 6, 9, 11, 15]
+        x = 6
+        의 인자들이 주어지면, L[3] == 6 이므로 3 을 리턴해야 합니다.
+
+        또 다른 예로,
+        L = [2, 5, 7, 9, 11]
+        x = 4
+        로 주어지면, 리스트 L 내에 4 의 원소가 존재하지 않으므로 -1 을 리턴해야 합니다.
+
+        이 연습문제에서는 알고리즘의 효율성도 평가합니다. 만약 순차 (선형) 탐색 알고리즘을 구현하는 경우에는
+        제한 시간 요구사항을 만족하지 못하여 효율성 테스트 케이스들을 통과하지 못할 수도 있습니다.
+
+        '''
+        L = [2, 3, 5, 6, 9, 11, 15]
+        #L = [] 
+        x = 15
+        #x = 20
+        
+        def solution1(L, x):
+            indx = -1 
+            if len(L) == 0:
+                return indx
+
+            lower=0
+            upper=len(L)-1
+            tmp =[]
+            
+            while lower <= upper:
+                middle=(lower+upper)//2
+               
+                if x > L[middle]:
+                    lower=middle+1
+                elif x < L[middle]:
+                    upper=middle-1
+                elif x == L[middle]:
+                    indx = middle
+                    return indx
+                tmp = L[lower:upper+1] # 뭔가 이 과정에서 시간을 많이 잡아 먹는 다는 생각이 들었고, 최종 lower와 upper 만을 사용하여 , tmp 리스트를 구하면 될것같았다.
+            
+            if x not in tmp:
+                return indx
+                    
+                #L=L[lower:upper+1] # L를 슬라이싱 해버리면, 인덱스가 0부터 시작하므로 IndexError: list index out of range가 계속 뜬다는 점 유의!!!
+            return indx
+        
+              
+        def solution2(L, x): # PASS!!!! 
+            # [1] 빈 리스트가 들어올 때와 [2] 리스트에 없는 값이 들어올 때의 예외 처리에 유의 하여야겠다.
+            '''
+            정확성: 55.6
+            효율성: 44.4
+            합계: 100.0 / 100.0
+            '''
+            indx = -1 
+            lower=0
+            upper=len(L)-1
+            
+            if len(L) == 0:
+                return indx
+
+            while lower <= upper:
+                middle=(lower+upper)//2
+               
+                if x > L[middle]:
+                    lower=middle+1
+                elif x < L[middle]:
+                    upper=middle-1
+                elif x == L[middle]:
+                    indx = middle
+                    return indx
+            
+            if x not in L[lower:upper+1]:
+                return indx
+        
+        def solution3(L, x): # PASS!!!! 
+            # -1의 중복을 줄어 효율성을 높여보자.
+            '''
+            정확성: 55.6
+            효율성: 44.4
+            합계: 100.0 / 100.0
+            '''
+            lower=0
+            upper=len(L)-1
+
+            while lower <= upper:
+                middle=(lower+upper)//2
+               
+                if x > L[middle]:
+                    lower=middle+1
+                elif x < L[middle]:
+                    upper=middle-1
+                else:
+                    return middle
+            return -1
+                    
+        return JsonResponse({"RESULT": solution3(L,x)}, status=200)
