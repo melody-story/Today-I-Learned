@@ -505,8 +505,23 @@ class GrammerView(View):
         * 함수 이름이 필요없이 익명의 함수를 사용하여 바로 사용할수있음.
             print(list(map(lambda x: x+1, a))) 
             =>[2, 3, 4]
-        '''
+        
             
+        [선형 탐색, x의 위치 찾기]
+        ====================
+            L = [3,8,2,7,6,10,9]
+            x = 6
+            def linear_search(S, x):
+                i=0
+                while i<len(L) and L[i] != x:
+                    i+=1
+                if i < len(L):
+                    return i
+                else:
+                    return -1    
+                
+            def linear_search(S, x):
+                return S.index(x)
+        
+        '''
         return JsonResponse({"MESSAGE": "Hello"}, status=200)
-
-
