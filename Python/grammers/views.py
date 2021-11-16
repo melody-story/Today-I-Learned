@@ -523,5 +523,50 @@ class GrammerView(View):
             def linear_search(S, x):
                 return S.index(x)
         
+        
+        [재귀 알고리즘]
+        =============== 
+        1) 잘못된 예시 -  종결 조건이 없음   
+            def sum1(n):
+                print(n)
+                return n + sum1(n -1) # 자신을 재귀호출하고있음.
+            # a = int (input("Number:"))
+            # print(sum(a))
+            Number:30
+            30
+            29
+            28
+            27
+            26
+            25
+            24
+            23
+            22
+            21
+            -995..
+            ..... 에러가 남....
+            
+            def sum2(n):
+                print(n)
+                if n<= 1:
+                    return n
+                else:
+                    return n+ sum2(n-1)
+            n=10일때 콘솔에 찍히는 결과 
+            10
+            9
+            8
+            7
+            6
+            5
+            4
+            3
+            2
+            1
+            
+            sum2(10) = 55
+            a = int(input("Number:"))
+            print(sum2(a))
+            
         '''
         return JsonResponse({"MESSAGE": "Hello"}, status=200)
