@@ -1,6 +1,6 @@
 from django.urls import path
 
-from grammers.views import GrammerView, ProgrammersExample2View, ProgrammersExample3View, ProgrammersExample4View, ProgrammersExample5View, ProgrammersExample7View 
+from grammers.views import GrammerView, ProgrammersExample2View, ProgrammersExample3View, ProgrammersExample4View, ProgrammersExample5View, ProgrammersExample7View, ProgrammersExample8View 
 
 urlpatterns = [
     path('grammers', GrammerView.as_view()),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('programmers_example4', ProgrammersExample4View.as_view()),
     path('programmers_example5', ProgrammersExample5View.as_view()),
     path('programmers_example7', ProgrammersExample7View.as_view()),
+    path('programmers_example8', ProgrammersExample8View.as_view()),
 ]
