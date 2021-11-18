@@ -1,5 +1,7 @@
 import json
+from typing import Counter
 from django import views
+import django
 # import requests
 
 from django.views         import View
@@ -570,8 +572,6 @@ class GrammerView(View):
             
         '''
         return JsonResponse({"MESSAGE": "Hello"}, status=200)
-        
-    
 # 2. 선형 배열 알고리즘 풀이
 class ProgrammersExample2View(View):
     def get(self, request):
@@ -814,3 +814,477 @@ class ProgrammersExample3View(View):
             return -1
                     
         return JsonResponse({"RESULT": solution3(L,x)}, status=200)
+    
+class ProgrammersExample4View(View):
+    
+    def get (self, request):
+    
+        '''
+        (04) 피보나치 순열
+        문제 설명
+        인자로 0 또는 양의 정수인 x 가 주어질 때, 
+        Fibonacci 순열의 해당 값을 구하여 반환하는 함수 solution() 을 완성하세요.
+
+        Fibonacci 순열은 아래와 같이 정의됩니다.
+        F0 = 0
+        F1 = 1
+        Fn = Fn - 1 + Fn - 2, n >= 2
+
+        재귀함수 작성 연습을 의도한 것이므로,
+        재귀적 방법으로도 프로그래밍해 보고, 반복적 방법으로도 프로그래밍해 보시기 바랍니다.
+        '''
+        n=int(input("Number"))
+        
+        # 1) 재귀함수로 풀기
+        def solution1_F(n):
+            if n <=1:
+                return n
+            else:
+                return solution1_F(n-1) + solution1_F(n-2)   
+        
+        def solution2_F(x):
+            return n if n <=1 else solution2_F(n-1) + solution2_F(n-2) 
+        
+        # 2) 반복함수로 풀기 난이도 ⭐️⭐️⭐️⭐️⭐️
+        def solution3_F(n):
+            answer=0 # n=3
+            fa = 0
+            fb = 1
+            # if n == 0: return 0 //  answer가 0으로 초기화 되어있으므로 안써줘도 상관없음. 
+            while n>0:
+                n-=1
+                fa, fb = fb(1), fa+fb(0+1) # 값변경 사용
+                answer = fa
+            return answer       
+         
+        return  JsonResponse({"RESULT": solution2_F(n)}, status=200)
+    
+class ProgrammersExample5View(View):
+    '''
+    # (05) 재귀적 이진탐색
+
+    문제 설명
+
+    리스트 L 과, 그 안에서 찾으려 하는 원소 x 가 인자로 주어지고, 
+    
+    또한 탐색의 대상이 되는 리스트 내에서의 범위 인덱스가 l 부터 u 까지로 (인자로) 정해질 때, 
+    
+    x 와 같은 값을 가지는 원소의 인덱스를 리턴하는 함수 solution() 을 완성하세요. 
+    
+    만약 리스트 L 안에 x 와 같은 값을 가지는 원소가 존재하지 않는 경우에는 -1 을 리턴합니다. 
+    
+    리스트 L 은 자연수 원소들로 이루어져 있으며, 크기 순으로 정렬되어 있다고 가정합니다. 또한, 동일한 원소는 두 번 이상 나타나지 않습니다.
+
+    인덱스 범위를 나타내는 l 과 u 가 인자로 주어지는 이유는, 이 함수를 재귀적인 방법으로 구현하기 위함입니다. 
+    
+    빈 칸에 알맞은 내용을 채워서 재귀 함수인 solution() 을 완성하세요.
+
+    예를 들어,L = [2, 3, 5, 6, 9, 11, 15]x = 6l = 0u = 6의 인자들이 주어지면, L[3] == 6 이므로 3 을 리턴해야 합니다.
+
+    또 다른 예로,L = [2, 5, 7, 9, 11]x = 4l = 0u = 4로 주어지면, 리스트 L 내에 4 의 원소가 존재하지 않으므로 -1 을 리턴해야 합니다.
+    '''
+    def get (self, request):
+        '''
+        정확성: 55.6
+        효율성: 0.0
+        합계: 55.6 / 100.0
+        '''
+        L = [2, 5, 7, 9, 11]
+        x = 4
+        l = 0
+        u = 4
+        def solution1(L, x, l, u):
+            if "x not in L":
+                return -1
+            mid = (l + u) // 2
+            if x == L[mid]:
+                return mid
+            elif x < L[mid]:
+                return "solution1(L, x, l, mid-1)" 
+            else:
+                return "solution1(L, x, mid+1, u)"
+        
+        
+        def solution2(L, x, l, u):
+            '''
+            난이도 ⭐️⭐️⭐️⭐️⭐️ 효율성 생각하기!!!
+            채점 결과
+            정확성: 55.6
+            ⭐️ 효율성: 44.4  
+            합계: 100.0 / 100.0
+            '''
+            if "l>u":  # ⭐️ x가 리스트 L에 없다면,  
+                        #x=10 L=[11,15]일때, lower는 0, mid=0.5, upper=1로 까지 가게 되므로, u=-0.5, l=1.5가 된다. => 뒤바뀜. 
+                        #x=16 L=[11,15]일때, lower는 0, mid=0.5, upper=1로 까지 가게 되므로, u=1, l=1.5가 된다. => 뒤바뀜. 
+                return -1
+            mid = (l + u) // 2
+            if x == L[mid]:
+                return mid
+            elif x < L[mid]:
+                return "solution2(L, x, l, mid-1)" 
+            else:
+                return "solution2(L, x, mid+1, u)"
+        
+        return  JsonResponse({"RESULT": solution2(L, x, l, u)}, status=200)
+
+class ProgrammersExample7View(View):
+    '''
+    (07) 연결 리스트 순회
+    문제 설명
+    제 7 강에서 소개된 추상적 자료구조로 LinkedList 라는 이름의 클래스가 정의되어 있다고 가정하고, 이 리스트를 처음부터 끝까지 순회하는 메서드 traverse() 를 완성하세요.
+
+    메서드 traverse() 는 리스트를 리턴하되, 이 리스트에는 연결 리스트의 노드들에 들어 있는 데이터 아이템들을 연결 리스트에서의 순서와 같도록 포함합니다. 예를 들어, LinkedList L 에 들어 있는 노드들이 43 -> 85 -> 62 라면, 올바른 리턴 값은 [43, 85, 62] 입니다.
+
+    이 규칙을 적용하면, 빈 연결 리스트에 대한 순회 결과로 traverse() 메서드가 리턴해야 할 올바른 결과는 [] 입니다.
+
+    [참고] "실행" 을 눌렀을 때 통과하는 것은 아무 의미 없습니다. 
+    '''
+    def get (self, request):
+        class Node:
+            def __init__(self, item):
+                self.data = item
+                self.next = None
+
+        class LinkedList:
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = None
+                self.tail = None
+
+            def getAt(self, pos):
+                if pos < 1 or pos > self.nodeCount:
+                    return None
+                i = 1
+                curr = self.head
+                while i < pos:
+                    curr = curr.next
+                    i += 1
+                return curr
+
+            def traverse(self):
+                answer=[]
+                a = self.head
+                while a != None:            # 빈 리스트라면 head와 tail이 None
+                    answer.append(a.data) 
+                                            # 빈 리스트가 아니라면 헤더가 존재하므로 추가, 
+                                            # a는 노드의 순서만 의미하므로, 노드이 데이터에 접근하려면 a.data를 해주어야함. 
+                    a = a.next              # 헤드의 다음 연결 노드로 접근
+                return answer
+
+            def solution(x):
+                return 0
+        
+        return  JsonResponse({"RESULT": []}, status=200)
+ 
+class ProgrammersExample8View(View):
+    '''
+    문제 설명
+    제 8 강에서 소개된 추상적 자료구조 LinkedList 클래스의 메서드로서 popAt() 메서드를 강의 내용에 소개된
+    요구조건을 만족시키도록 구현하세요.
+
+    초기 코드로 들어 있는 것은 solution() 함수를 포함하여 다른 부분은 수정하지 말고, 
+    def popAt(self, pos): 의 메서드 몸체만 구현하세요.
+
+    만약, 인자로 주어진 pos 가 올바른 범위의 값을 가지지 않는 경우에는 IndexError exception 을 발생시키도록 합니다. 
+    이렇게 하기 위한 코드는 raise IndexError 입니다.
+'''
+    def get (self, request):
+        class Node:
+            
+            def __init__(self, item):
+                self.data = item
+                self.next = None
+
+
+        class LinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = None
+                self.tail = None
+
+
+            def getAt(self, pos):
+                if pos < 1 or pos > self.nodeCount:
+                    return None
+
+                i = 1
+                curr = self.head
+                while i < pos:
+                    curr = curr.next
+                    i += 1
+
+                return curr
+
+
+            def insertAt(self, pos, newNode):
+                if pos < 1 or pos > self.nodeCount + 1:
+                    return False
+
+                if pos == 1:
+                    newNode.next = self.head
+                    self.head = newNode
+
+                else:
+                    if pos == self.nodeCount + 1:
+                        prev = self.tail
+                    else:
+                        prev = self.getAt(pos - 1)
+                        newNode.next = prev.next
+                        prev.next = newNode
+
+                if pos == self.nodeCount + 1:
+                    self.tail = newNode
+
+                self.nodeCount += 1
+                return True
+
+            # 1차 작성 코드
+            def popAt_1(self, pos):
+                #인덱스 벗어났을 때,
+                if pos < 1 or pos > self.nodeCount: 
+                    raise IndexError
+                '''
+                1) head를 없애는 경우, pos == 1
+                2) tail을 없애는 경우, pos == nodeCount
+                3) nodeCount ==1, pos ==1,  유일한 노드를 없애는 경우 + 2) tail을 없애는 경우, pos == nodeCount
+                4) nodeCount > 1 1<post<nodeCount
+                '''
+                
+                if pos == self.nodeCount: # tail의 노드를 없앨 경우  + 빈리스트
+                    prev = self.getAt(pos-1)
+                    curr = self.tail
+                    self.tail = prev
+
+                if pos == 1: # head의 노드를 없앨 경우 +  빈리스트
+                    curr = self.head
+                    self.head = curr.next
+                else:
+                    prev = self.getAt(pos-1)
+                    if pos == self.nodeCount:
+                        curr = self.tail
+                        self.tail = prev
+                    else:
+                        curr = prev.next
+                        prev.next = curr.next
+                        
+                    if self.nodeCount == 1:
+
+                        curr = self.head
+
+                self.nodeCount -=1
+
+                return curr.data
+            
+            # 2차 작성 코드
+            def popAt_2(self, pos):
+                '''
+                테스트 1 〉	통과 (0.05ms, 16.8MB)
+                테스트 2 〉	통과 (0.06ms, 16.6MB)
+                테스트 3 〉	통과 (0.04ms, 16.6MB)
+                테스트 4 〉	통과 (0.08ms, 16.7MB)
+                채점 결과
+                정확성: 100.0
+                합계: 100.0 / 100.0
+                '''
+                if pos < 1 or pos > self.nodeCount :
+                    raise IndexError
+                
+                # head 제거
+                if pos == 1:
+                    # 유일한 원소 head + tail 제거  
+                    if self.nodeCount == 1:
+                        curr = self.tail
+                        self.head = None
+                        self.tail = None # ⭐️ tail도, head도 None
+                    # 여러원소 중 head 제거  
+                    else:
+                        curr = self.head
+                        self.head = curr.next
+                        curr.next = None # ⭐️ 잘라낸 curr의 next는 끊겨있으므로 None!
+                else : 
+                    # tail 제거
+                    if pos == self.nodeCount:
+                        prev = self.getAt(pos-1)
+                        self.tail = prev
+                        curr = prev.next
+                        prev.next = None  # ⭐️ prev가 꼬리가 되므로 prev.next는 None
+                        curr.next = None 
+                    # head와 tail사이의 원소 제거
+                    else:
+                        prev = self.getAt(pos-1)
+                        curr = prev.next
+                        prev.next = curr.next
+                        curr.next = None
+                
+                self.nodeCount -= 1
+                return curr.data 
+
+
+            def traverse(self):
+                result = []
+                curr = self.head
+                while curr is not None:
+                    result.append(curr.data)
+                    curr = curr.next
+                return result
+
+            def solution(x):
+                return 0
+    
+        return  JsonResponse({"RESULT": []}, status=200)
+    
+class ProgrammersExample9View(View):
+    '''
+    (09) dummy head 를 가지는 연결 리스트 노드 삭제
+    문제 설명
+    제 9 강에서 소개된 추상적 자료구조 LinkedList 는 dummy head node 를 가지는 연결 리스트입니다.
+    이 클래스의 아래와 같은 메서드들을, 강의 내용에 소개된 요구조건을 만족시키도록 구현하세요.
+
+    popAfter()
+    popAt()
+    이 때, popAt() 메서드의 구현에서는 popAfter() 를 호출하여 이용하도록 합니다. 
+    (그렇게 하지 않을 수도 있지만, 여기에서는 popAfter() 의 이용에 의해서 코드 구현이 보다 쉬워지는 것을 확인하기 위함입니다.)
+
+    초기 코드로 들어 있는 것은 solution() 함수를 포함하여 다른 부분은 수정하지 말고, 
+    def popAfter(self, prev): 와 def popAt(self, pos): 의 메서드 몸체만 구현하세요.
+
+    만약, popAt() 메서드에 인자로 주어진 pos 가 올바른 범위의 값을 가지지 않는 경우에는 
+    IndexError exception 을 발생시키도록 합니다. 이렇게 하기 위한 코드는 raise IndexError 입니다.
+    '''
+    def get (self, request):
+        class Node:
+            
+            def __init__(self, item):
+                self.data = item
+                self.next = None
+
+
+        class LinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0         # ⭐️ nodeCount는 dumyNode를 제외함.
+                self.head = Node(None) 
+                self.tail = None           # ⭐️ 노드 삭제시  tail None이어야함. 
+                self.head.next = self.tail # ⭐️ head와 tail의 연결관계 생성
+
+
+            def traverse(self):
+                result = []
+                curr = self.head
+                while curr.next:
+                    curr = curr.next
+                    result.append(curr.data)
+                return result
+
+
+            def getAt(self, pos):
+                if pos < 0 or pos > self.nodeCount:
+                    return None
+
+                i = 0
+                curr = self.head
+                while i < pos:
+                    curr = curr.next
+                    i += 1
+
+                return curr
+
+
+            def insertAfter(self, prev, newNode):
+                newNode.next = prev.next
+                if prev.next is None:
+                    self.tail = newNode
+                prev.next = newNode
+                self.nodeCount += 1
+                return True
+
+
+            def insertAt(self, pos, newNode):
+                if pos < 1 or pos > self.nodeCount + 1:
+                    return False
+
+                if pos != 1 and pos == self.nodeCount + 1:
+                    prev = self.tail
+                else:
+                    prev = self.getAt(pos - 1)
+                return self.insertAfter(prev, newNode)
+
+            
+            '''
+            테스트 1 〉	통과 (0.06ms, 16.6MB)
+            테스트 2 〉	통과 (0.05ms, 16.6MB)
+            테스트 3 〉	통과 (0.05ms, 16.8MB)
+            테스트 4 〉	통과 (0.06ms, 16.6MB)
+            테스트 5 〉	실패 (0.15ms, 16.7MB)
+            '''
+            # 초기 나의 풀이
+            def popAfter_1(self, prev):
+                # prev가 끝일때,
+                if prev.next is None:
+                    return None
+                curr = prev.next
+                # post가 1일때,
+                if prev == self.head:#******
+                    prev.next = curr.next
+                    if curr.next is None:
+                        prev.next = None
+                        self.tail = prev
+                elif curr.next is None: # pos가 끝일때
+                    prev.next = None
+                    self.tail = prev
+                else:# 중간
+                    prev.next = curr.next
+                curr.next = None
+                self.nodeCount -=1
+                return curr.data
+
+
+            def popAt_1(self, pos):
+                if pos < 1 and pos >= self.nodeCount:
+                    raise IndexError
+                # pos == 1
+
+                if pos == 1:
+                    prev = self.head
+            # 1<pos<nodeCount
+                else:
+                    prev = self.getAt(pos-1)
+                return self.popAfter(prev)
+            
+            
+            '''
+            테스트 1 〉	통과 (0.05ms, 16.6MB)
+            테스트 2 〉	통과 (0.07ms, 16.7MB)
+            테스트 3 〉	통과 (0.05ms, 16.5MB)
+            테스트 4 〉	통과 (0.07ms, 16.6MB)
+            테스트 5 〉	통과 (0.05ms, 16.6MB)
+            '''
+            # 진화된 나의 풀이 - # ⭐️ ⭐️  dummy head 를 가지는 연결 리스트에서는 pos가 끝일 때만 유의하면됨.
+            def popAfter_2(self, prev):
+                # 빈 리스트 일때, count=0
+                if prev.next is None:
+                    return None
+                curr = prev.next
+                    
+                if curr.next == None:    # 👈 pos가 끝자리 일때 유의
+                    if self.nodeCount == 1:
+                        self.tail = None
+                    else:
+                        self.tail = prev
+                prev.next = curr.next
+                curr.next = None
+                self.nodeCount -=1
+                return curr.data
+
+
+            def popAt_2(self, pos):
+                if pos < 1 or pos > self.nodeCount: # ⭐️ or 주의 하기 ,  nodeCount는 dumyNode를 제외
+                    raise IndexError
+                prev = self.getAt(pos-1)
+                return self.popAfter_2(prev)    
+            
+            def solution(x):
+                return 0
+    
+        return  JsonResponse({"RESULT": []}, status=200)
