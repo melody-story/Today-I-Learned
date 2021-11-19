@@ -1288,3 +1288,386 @@ class ProgrammersExample9View(View):
                 return 0
     
         return  JsonResponse({"RESULT": []}, status=200)
+    
+    
+    
+class ProgrammersExample10_1View(View):
+    
+    '''
+    (10-1) 양방향 연결 리스트 역방향 순회
+    문제 설명
+    제 10 강에서 소개된 추상적 자료구조 DoublyLinkedList 에 대하여, 또한 강의 내용에서 언급한 reverse() 메서드를 구현하세요.
+
+    이 reverse() 메서드는 양방향 연결 리스트를 끝에서부터 시작해서 맨 앞에 도달할 때까지 (tail 방향에서 head 방향으로) 순회하면서, 
+    방문하게 되는 node 에 들어 있는 data item 을 순회 순서에 따라 리스트에 담아 리턴합니다.
+
+    예를 들어, DoublyLinkedList L 에 들어 있는 노드들이 43 -> 85 -> 62 라면, 올바른 리턴 값은 [62, 85, 43] 입니다.
+
+    이 규칙을 적용하면, 빈 연결 리스트에 대한 역방향 순회 결과로 reverse() 메서드라 리턴해야 할 올바른 결과는 [] 입니다.
+
+    '''    
+    def get(self,request):
+        
+        '''
+        테스트 1 〉	통과 (0.04ms, 16.6MB)
+        테스트 2 〉	통과 (0.04ms, 16.6MB)
+        '''
+        
+        class Node:
+            
+            def __init__(self, item):
+                self.data = item
+                self.prev = None
+                self.next = None
+
+
+        class DoublyLinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = Node(None)
+                self.tail = Node(None)
+                self.head.prev = None
+                self.head.next = self.tail
+                self.tail.prev = self.head
+                self.tail.next = None
+
+            # 나의 풀이
+            def reverse(self):
+                result = []
+                
+                curr = self.tail
+                while curr.prev.prev !=None:            
+                    curr = curr.prev
+                    result.append(curr.data)
+                    
+                return result
+
+
+            def getAt(self, pos):
+                if pos < 0 or pos > self.nodeCount:
+                    return None
+
+                if pos > self.nodeCount // 2:
+                    i = 0
+                    curr = self.tail
+                    while i < self.nodeCount - pos + 1:
+                        curr = curr.prev
+                        i += 1
+                else:
+                    i = 0
+                    curr = self.head
+                    while i < pos:
+                        curr = curr.next
+                        i += 1
+
+                return curr
+
+
+            def insertAfter(self, prev, newNode):
+                next = prev.next
+                newNode.prev = prev
+                newNode.next = next
+                prev.next = newNode
+                next.prev = newNode
+                self.nodeCount += 1
+                return True
+
+
+            def insertAt(self, pos, newNode):
+                if pos < 1 or pos > self.nodeCount + 1:
+                    return False
+
+                prev = self.getAt(pos - 1)
+                return self.insertAfter(prev, newNode)
+
+
+        def solution(x):
+            return 0
+        
+        return  JsonResponse({"RESULT": self.reverse(self)}, status=200)
+    
+class ProgrammersExample10_2View(View):
+    
+    '''
+    (10-2) 양방향 연결 리스트 노드 삽입
+    문제 설명
+    제 10 강에서 소개된 추상적 자료구조 DoublyLinkedList 의 메서드로 insertBefore() 를 구현하세요.
+
+    이 insertBefore() 메서드에는 두 개의 인자가 주어지는데, next 는 어느 node 의 앞에 새로운 node 를 삽입할지를 지정하고, 
+    newNode 는 삽입할 새로운 node 입니다.
+
+    강의 내용에서 소개된 insertAfter() 메서드의 구현과 매우 유사하게 할 수 있습니다.
+    '''    
+    def get(self,request):
+        '''
+        테스트 1 〉	통과 (0.06ms, 16.8MB)
+
+        '''
+        
+        class Node:
+        
+            def __init__(self, item):
+                self.data = item
+                self.prev = None
+                self.next = None
+
+        class DoublyLinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = Node(None)
+                self.tail = Node(None)
+                self.head.prev = None
+                self.head.next = self.tail
+                self.tail.prev = self.head
+                self.tail.next = None
+
+            def traverse(self):
+                result = []
+                curr = self.head
+                while curr.next.next:
+                    curr = curr.next
+                    result.append(curr.data)
+                return result
+
+            #나의 풀이
+            def insertBefore(self, next, newNode):
+                # if next == self.head:
+                #     return False
+                prevNode = next.prev
+                nextNode = next
+                nextNode.prev  = newNode
+                prevNode.next = newNode   
+                newNode.next  = nextNode
+                newNode.prev  = prevNode 
+                self.nodeCount +=1
+                return True
+
+            def solution(x):
+                return 0
+        
+        return JsonResponse({"RESULT": self.insertBefore(self,1)}, status=200)
+        
+class ProgrammersExample10_3View(View):
+    
+    '''
+    (10-3) 양방향 연결 리스트 노드 삭제
+    문제 설명
+    제 10 강에서 소개된 추상적 자료구조 DoublyLinkedList 에 대하여 node 의 삭제 연산에 관련한 아래와 같은 메서드들을 구현하세요.
+
+    popAfter()
+    popBefore()
+    popAt()
+    popAfter(prev) 는 인자 prev 에 의하여 주어진 node 의 다음에 있던 node 를 삭제하고, popBefore(next) 는 인자 next 에 의하여
+    주어진 node 의 이전에 있던 node 를 삭제합니다. 그리고 삭제되는 node 에 담겨 있던 data item 을 리턴합니다.
+
+    popAt(pos) 는 인자 pos 에 의하여 지정되는 node 를 삭제하고 그 node 에 담겨 있던 data item 을 리턴하는데,
+    위 popAfter() 또는 popBefore() 를 호출하여 이용하는 방식으로 구현하세요. 또한, 만약 인자 pos 가 올바른 범위 내에 있지 않은 경우에는
+    raise IndexError 를 이용하여 IndexError exception 을 일으키도록 구현하세요.
+
+    테스트 케이스 1-3 은 각각 (1) popAfter(), (2) popBefore(), (3) popAt() 메서드의 올바른 동작을 검증하는 케이스입니다.
+
+    '''    
+    def get(self,request):
+        
+        '''
+        테스트 1 〉	통과 (0.07ms, 16.7MB)
+        테스트 2 〉	통과 (0.06ms, 16.6MB)
+        테스트 3 〉	통과 (0.07ms, 16.7MB)
+
+        '''
+        
+        class Node:
+    
+            def __init__(self, item):
+                self.data = item
+                self.prev = None
+                self.next = None
+
+
+        class DoublyLinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = Node(None)
+                self.tail = Node(None)
+                self.head.prev = None
+                self.head.next = self.tail
+                self.tail.prev = self.head
+                self.tail.next = None
+
+
+            def traverse(self):
+                result = []
+                curr = self.head
+                while curr.next.next:
+                    curr = curr.next
+                    result.append(curr.data)
+                return result
+
+
+            def getAt(self, pos):
+                if pos < 0 or pos > self.nodeCount:
+                    return None
+
+                if pos > self.nodeCount // 2:
+                    i = 0
+                    curr = self.tail
+                    while i < self.nodeCount - pos + 1:
+                        curr = curr.prev
+                        i += 1
+                else:
+                    i = 0
+                    curr = self.head
+                    while i < pos:
+                        curr = curr.next
+                        i += 1
+
+                return curr
+
+
+            def insertAfter(self, prev, newNode):
+                next = prev.next
+                newNode.prev = prev
+                newNode.next = next
+                prev.next = newNode
+                next.prev = newNode
+                self.nodeCount += 1
+                return True
+
+
+            def insertAt(self, pos, newNode):
+                if pos < 1 or pos > self.nodeCount + 1:
+                    return False
+
+                prev = self.getAt(pos - 1)
+                return self.insertAfter(prev, newNode)
+
+            # 나의 풀이
+            def popAfter(self, prev):       
+                curr = prev.next
+                nextN = curr.next
+                nextN.prev = prev
+                prev.next = nextN
+                self.nodeCount -=1        
+                return curr.data  
+
+            # 나의 풀이
+            def popBefore(self, nextN):      
+                curr = nextN.prev
+                prev = curr.prev
+                prev.next = nextN
+                nextN.prev = prev
+                self.nodeCount -=1
+                return curr.data
+
+            # 나의 풀이
+            def popAt(self, pos):
+                if pos <1 or pos>self.nodeCount:
+                    raise IndexError
+                prev = self.getAt(pos-1)
+                return self.popAfter(prev)
+        
+        return  JsonResponse({"RESULT": self.popAt(self,1)}, status=200)
+    
+    
+        
+class ProgrammersExample10_4View(View):    
+    '''
+   (10-4) 양방향 연결 리스트의 병합
+    문제 설명
+    제 10 강에서 소개된 추상적 자료구조 DoublyLinkedList 에 대하여 두 개의 양방향 연결 리스트를 앞뒤로 이어 붙이는 메서드 concat() 을 구현하세요.
+
+    예를 들어, 양방향 연결 리스트 L1 에는 1 -> 2 -> 3 의 원소가 순서대로 들어 있고, 또다른 양방향 연결 리스트 L2 에는 4 -> 5 의 순서로 원소가 들어 있을 때,
+    메서드 호출 L1.concat(L2) 의 결과로 L1 은 1 -> 2 -> 3 -> 4 -> 5 의 양방향 연결 리스트가 됩니다. 물
+    론, L1 또는 L2 또는 둘 다가 비어 있는 양방향 연결 리스트인 경우도 고려되도록 코드를 작성해야 합니다.
+    '''
+    def get(self,request):
+        '''
+        테스트 1 〉	통과 (0.05ms, 16.7MB)
+        테스트 2 〉	통과 (0.07ms, 16.6MB)
+        테스트 3 〉	통과 (0.05ms, 16.6MB)
+        '''
+
+        class Node:
+            
+            def __init__(self, item):
+                self.data = item
+                self.prev = None
+                self.next = None
+
+
+        class DoublyLinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = Node(None)
+                self.tail = Node(None)
+                self.head.prev = None
+                self.head.next = self.tail
+                self.tail.prev = self.head
+                self.tail.next = None
+
+            # 나의 풀이 - 양방향 연결리스트에서는 각각의 리스트가 빈리스트일때를 고려하지 않아도 해결된다.  
+            def concat(self, L):
+                L1Last = self.tail.prev
+                L2First = L.head.next
+                L1Last.next = L2First
+                L2First.prev = L1Last
+                self.tail = L.tail
+                L.head = self.head
+                self.nodeCount +=L.nodeCount
+                return self
+
+
+            def traverse(self):
+                result = []
+                curr = self.head
+                while curr.next.next:
+                    curr = curr.next
+                    result.append(curr.data)
+                return result
+
+            
+            def getAt(self, pos):
+                if pos < 0 or pos > self.nodeCount:
+                    return None
+
+                if pos > self.nodeCount // 2:
+                    i = 0
+                    curr = self.tail
+                    while i < self.nodeCount - pos + 1:
+                        curr = curr.prev
+                        i += 1
+                else:
+                    i = 0
+                    curr = self.head
+                    while i < pos:
+                        curr = curr.next
+                        i += 1
+
+                return curr
+
+            def insertAfter(self, prev, newNode):
+                next = prev.next
+                newNode.prev = prev
+                newNode.next = next
+                prev.next = newNode
+                next.prev = newNode
+                self.nodeCount += 1
+                return True
+
+
+            def insertAt(self, pos, newNode):
+                if pos < 1 or pos > self.nodeCount + 1:
+                    return False
+
+                prev = self.getAt(pos - 1)
+                return self.insertAfter(prev, newNode)
+
+
+        def solution(x):
+            return 0
+        
+        return JsonResponse({"RESULT": self.concat(self,1)}, status=200)
