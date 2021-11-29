@@ -26,10 +26,13 @@ python -m venv 가상환경명
 	pip install install simplejson
 	pip install install simplejson==버전
 	pip install --upgrade simplejson
+ 
 	pip show simplejson
 	pip show -f simplejson
+ 
 	pip freeze > packages.txt
 	pip freeze --all > packages.txt
+ 
 	pip install -r packages.txt
 
 
