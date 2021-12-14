@@ -1736,3 +1736,195 @@ class ProgrammersExample11View(View):
             return S.isEmpty()
         
         return JsonResponse({"RESULT": solution(self.expr)}, status=200)
+    
+class ProgrammersExample12View(View):    
+    
+    '''
+        (12) 중위표현 수식 --> 후위표현 수식
+    문제 설명
+    중위 표기법을 따르는 수식 S 가 인자로 주어질 때, 이 수식을 후위 표기법을 따르는 수식으로 변환하여 반환하는 함수 solution() 을 완성하세요.
+
+    인자로 주어지는 수식 문자열 S 는 영문 대문자 알파벳 한 글자로 이루어지는 변수 A - Z 까지와 4칙연산을 나타내는 연산자 기호 +, -, *, /, 그리고 여는 괄호와 닫는 괄호 (, ) 로 이루어져 있으며 공백 문자는 포함하지 않는 것으로 가정합니다. 또한, 올바르게 구성되지 않은 수식은 인자로 주어지지 않는다고 가정합니다. (수식의 유효성은 검증할 필요가 없습니다.)
+
+    문제에서 미리 주어진, 연산자의 우선순위를 표현한 python dict 인 prec 을 활용할 수 있습니다.
+
+    또한, 스택의 기초 강의에서 이미 구현한, 배열을 이용한 스택의 추상적 자료 구조 코드가 이미 포함되어 있으므로 그대로 이용할 수 있습니다.
+
+    (참고) 테스트 케이스를 보완하여 문제가 2019년 9월 24일에 수정되었습니다.
+    (추가 참고) 테스트 케이스를 또 보완하여 문제가 2021년 7월 21일에 수정되었습니다. 추가된 테스트 케이스들은 9번부터 12번까지입니다. 관련하여 질문과 답변 (https://programmers.co.kr/questions/19360) 을 참고할 수 있습니다.
+    '''
+    def get(self,request):
+        class ArrayStack:
+    
+            def __init__(self):
+                self.data = []
+
+            def size(self):
+                return len(self.data)
+
+            def isEmpty(self):
+                return self.size() == 0
+
+            def push(self, item):
+                self.data.append(item)
+
+            def pop(self):
+                return self.data.pop()
+
+            def peek(self):
+                return self.data[-1]
+
+        prec = {
+            '*': 3, '/': 3,
+            '+': 2, '-': 2,
+            '(': 1
+        }
+
+        ## 처음 접근 방식(오답)
+        def solution(S):
+            opStack = ArrayStack()
+            answer = ''
+            
+            for a in S:
+                if a in prec:# 딕셔너리에 있을 때
+                    opStack.push(a)
+                    opStack.peek()
+                elif a == ')': # 닫기 괄호를 만났을 때,
+                    while not opStack.isEmpty:
+                        b = opStack.pop()
+                        if prec[b] > 1:
+                            answer+=b
+                else:# 피연산자일때
+                    answer+=a
+            return answer
+        
+        
+        '''
+        테스트 1
+        입력값 〉	"(A+B)*(C+D)"
+        기댓값 〉	"AB+CD+*"
+        실행 결과 〉	테스트를 통과하였습니다.
+        테스트 2
+        입력값 〉	"A*B+C"
+        기댓값 〉	"AB*C+"
+        실행 결과 〉	테스트를 통과하였습니다.
+        테스트 3
+        입력값 〉	"A+B*C"
+        기댓값 〉	"ABC*+"
+        실행 결과 〉	테스트를 통과하였습니다.
+        테스트 4
+        입력값 〉	"A+B+C"
+        기댓값 〉	"AB+C+"
+        실행 결과 〉	테스트를 통과하였습니다.
+        테스트 5
+        입력값 〉	"(A+B)*C"
+        기댓값 〉	"AB+C*"
+        실행 결과 〉	테스트를 통과하였습니다.
+        테스트 6
+        입력값 〉	"A*(B+C)"
+        기댓값 〉	"ABC+*"
+        실행 결과 〉	테스트를 통과하였습니다.
+        '''
+        ## 나의 풀이
+        def solution(S):
+            opStack = ArrayStack()
+            answer = ''
+            
+            for a in S:
+                if a in prec:# 딕셔너리에 있을 때
+                    if opStack.isEmpty():
+                        opStack.push(a)
+                    elif a == '(':
+                        opStack.push(a)
+                    elif prec[opStack.peek()] < prec[a]:
+                        opStack.push(a)
+                    else:
+                        while not opStack.isEmpty() and prec[opStack.peek()]>=prec[a]:
+                            answer += opStack.pop()
+                        opStack.push(a) # 우선순위가 peek보다 낮을 때, stack의 데이터 꺼내고 새로 담아주기
+                            
+                elif a == ')': # 닫기 괄호를 만났을 때,
+                    while not opStack.isEmpty():
+                        top = opStack.peek()
+                        opStack.pop()
+                        if top != '(': 
+                            answer+=top
+                            
+                else:# 피연산자일때
+                    answer+=a
+                    
+            while not opStack.isEmpty():
+                answer += opStack.pop()
+                
+            return answer
+        
+        # 다른 풀이1
+        def solution(S):
+            opStack = ArrayStack()
+            answer = ''
+            #tmp=[]
+
+            for var in S:
+                # <prec>에 있을때
+                if var in prec:
+                    # 비어있을때
+                    if opStack.isEmpty():
+                        opStack.push(var)
+                    # 스택에서 이보다 높거나 같은 우선순위는 pop
+                    elif var == '(':
+                        opStack.push(var)
+                    # 스택에서 이보다 작은 priority를 갖는다면 push
+                    elif prec[opStack.peek()] < prec[var]:
+                        opStack.push(var)
+                    # 스택에서 이보다 큰 priority를 갖는다면 pop
+                    else:
+                        while not opStack.isEmpty() and prec[opStack.peek()]>=prec[var]:
+                            answer += opStack.pop()
+                        opStack.push(var)
+                # <괄호닫기>일때
+                # elif var == ')':
+                #     while opStack.peek() != '(':
+                #         answer += opStack.pop()
+                #     opStack.pop()
+                    
+                elif var == ')':
+                    topToken = opStack.pop()
+                    while topToken != '(':
+                        answer += topToken
+                        topToken = opStack.pop()
+                
+                # <인수>일때
+                else:
+                    answer += var
+            # 남은 인자 출력        
+            while not opStack.isEmpty():
+                answer += opStack.pop()
+                
+                
+        # 다른 풀이2
+        def solution(S):
+            opStack = ArrayStack()
+            answer = ''
+            for c in S:
+                if c not in "*+-/()":
+                    answer += c
+                if c == "(":
+                    opStack.push(c)
+                if c == ")":
+                    while opStack.peek() != "(":
+                        answer += opStack.pop()
+                    opStack.pop()
+                if c in "*+/-":
+                    if opStack.isEmpty():
+                        opStack.push(c)
+                    else:
+                        while prec[opStack.peek()] >= prec[c]:
+                            answer += opStack.pop()
+                            if opStack.isEmpty():
+                                break
+                        opStack.push(c)
+            while not opStack.isEmpty():
+                answer += opStack.pop()
+            return answer
+        
+        return JsonResponse({"RESULT": solution("(A+B)*(C+D)")}, status=200)
