@@ -1928,3 +1928,566 @@ class ProgrammersExample12View(View):
             return answer
         
         return JsonResponse({"RESULT": solution("(A+B)*(C+D)")}, status=200)
+    
+    
+class ArrayStack:
+        
+        def __init__(self):
+            self.data = []
+
+        def size(self):
+            return len(self.data)
+
+        def isEmpty(self):
+            return self.size() == 0
+
+        def push(self, item):
+            self.data.append(item)
+
+        def pop(self):
+            return self.data.pop()
+
+        def peek(self):
+            return self.data[-1]
+
+class ProgrammersExample13View(View):  
+    '''
+    # (13) 후위표현 수식 계산
+
+    ### **문제 설명**
+
+    인자로 주어진 문자열 expr 은 소괄호와 사칙연산 기호, 그리고 정수들로만 이루어진 중위 표현 수식입니다. 함수 `solution()` 은 
+    이 수식의 값을 계산하여 그 결과를 리턴하도록 작성되어 있습니다. 이 함수는 차례로 `splitTokens()`, `infixToPostfix()`, 
+    그리고 `postfixEval()` 함수를 호출하여 이 수식의 값을 계산하는데,
+
+    - `splitTokens()` - 강의 내용에서와 같은 코드로 이미 구현되어 있습니다.
+    - `infixToPostfix()` - 지난 강의의 연습문제에서 작성했던 코드를 수정하여, 문자열이 아닌 리스트를 리턴하도록 작성합니다.
+    - `postfixEval()` - 이번 강의의 연습문제입니다. 함수의 내용을 완성하세요.
+
+    즉, 두 개의 함수 `infixToPostfix()` 와 `postfixEval()` 을 구현하는 연습입니다. 스택을 이용하기 위하여 `class ArrayStack` 이 정의되어 있으므로 그것을 활용하세요.
+
+    [참고] Python 에는 `eval()` 이라는 built-in 함수가 있어서, 이 함수에 문자열을 인자로 전달하면, 
+    그 문자열을 그대로 Python 표현식으로 간주하고 계산한 결과를 리턴하도록 되어 있습니다. 이 built-in 함수 `eval()` 을 이용하면 
+    이 연습문제는 전혀 직접 코드를 작성하지 않고도 정답을 낼 수 있을 것이지만, 스택을 이용하여 중위표현식을 계산하는 프로그래밍 연습을 위한 것이니, 
+    강의 내용에서 설명한 절차를 수행하도록 코드를 작성해 보세요.
+   
+    '''
+      
+    def get(self,request):
+
+        def splitTokens(exprStr):
+            tokens = []
+            val = 0
+            valProcessing = False
+            
+            # (5+3)*(5-4)
+            # ['(', 5, '+', 3, ')' ,*, '(', 5, '-', 4, ')']
+            for c in exprStr:
+                if c == ' ':
+                    continue
+                if c in '0123456789':
+                    val = val * 10 + int(c)
+                    valProcessing = True
+                else:
+                    if valProcessing:
+                        tokens.append(val)
+                        val = 0
+                    valProcessing = False
+                    tokens.append(c) 
+            if valProcessing:
+                tokens.append(val)
+
+            return tokens
+
+
+        def infixToPostfix(tokenList):
+            prec = {
+                '*': 3,
+                '/': 3,
+                '+': 2,
+                '-': 2,
+                '(': 1,
+            }
+
+            opStack = ArrayStack()
+            postfixList = []
+            
+            for token in tokenList:
+                if type(token) is int:# 피연산자가 올 때, 
+                    postfixList.append(token)
+                elif token == '(': # 여는 괄호가 올때, 
+                    opStack.push(token)
+                    
+                elif token == ')':# 닫는 괄호가 올때, 
+                    while not opStack.peek() == '(':
+                        postfixList.append(opStack.pop())
+                    opStack.pop()
+                    
+                else:# 연산자가 올 때, 
+                    while not opStack.isEmpty():
+                        if prec[opStack.peek()] >= prec[token]:
+                            postfixList.append(opStack.pop())
+                        else : break #*** 반복문 끊어주기
+                    opStack.push(token)
+                
+            while not opStack.isEmpty():
+                postfixList.append(opStack.pop())
+
+            return postfixList
+
+
+        def postfixEval(tokenList):
+            valStack = ArrayStack()
+            
+            for token in tokenList:
+                if type(token) is int:
+                    valStack.push(token)
+                elif token == '*':
+                    val1 =valStack.pop()
+                    val2 =valStack.pop()
+                    valStack.push(val2*val1)
+                elif token == '/':
+                    val1 =valStack.pop()
+                    val2 =valStack.pop()
+                    valStack.push(val2/val1)
+                elif token == '+':
+                    val1 =valStack.pop()
+                    val2 =valStack.pop()
+                    valStack.push(val2+val1)
+                elif token == '-':
+                    val1 =valStack.pop()
+                    val2 =valStack.pop()
+                    valStack.push(val2-val1)
+                    
+            return valStack.pop()
+
+        def solution(expr):
+            tokens = ProgrammersExample13View.splitTokens(expr)
+            postfix = ProgrammersExample13View.infixToPostfix(tokens)
+            val = ProgrammersExample13View.postfixEval(postfix)
+            return val
+        
+        '''
+         테스트 1
+        입력값 〉	"5 + 3"
+        기댓값 〉	8
+        실행 결과 〉	테스트를 통과하였습니다.
+        출력 〉	[5, '+', 3]
+        테스트 2
+        입력값 〉	"(1 + 2) * (3 + 4)"
+        기댓값 〉	21
+        실행 결과 〉	테스트를 통과하였습니다.
+        출력 〉	['(', 1, '+', 2, ')', '*', '(', 3, '+', 4, ')']
+        테스트 3
+        입력값 〉	"7 * (9 - (3+2))"
+        기댓값 〉	28
+        실행 결과 〉	테스트를 통과하였습니다.
+        출력 〉	[7, '*', '(', 9, '-', '(', 3, '+', 2, ')', ')']
+        '''
+        return JsonResponse({"RESULT": solution("(5+4)*(6-7)")}, status=200)
+    
+class ProgrammersExample14View(View):  
+        '''
+        (14) 양방향 연결 리스트로 구현하는 큐
+        문제 설명
+        양방향 연결 리스트를 활용하여 큐 (queue) 의 추상적 자료구조 (abstract data structure) 구현을 완성하세요.
+
+        정의하고자 하는 큐의 추상적 자료구조는 class LinkedListQueue 로 구현됩니다. 
+        이 문제는 해당 클래스의 메서드들의 구현을 빈칸 채우기 형태로 완성하는 것으로 되어 있으며, 이 클래스의 구현은 L120 부터 시작합니다.
+
+        그 위에는 (LL1-117) 이 추상적 자료구조를 구현하기 위해서 이용할 class DoublyLinkedList 와, 
+        또한 여기서 이용하는 class Node 의 구현이 정의되어 있습니다. 이 코드는 이전의 "양방향 연결 리스트" 강의에서 다루어진 것과 완전히 동일합니다.
+
+        정확성 테스트는 class LinkedListQueue 의 각 메서드가 올바르게 구현되어 있는지를 검사합니다. 
+        "코드 실행" 을 눌렀을 때 예시 테스트 케이스를 통과하는 것은 아무런 의미가 없습니다.
+
+        '''
+        
+def get(self,request):
+        class Node:
+
+            def __init__(self, item):
+                self.data = item
+                self.prev = None
+                self.next = None
+
+
+        class DoublyLinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = Node(None)
+                self.tail = Node(None)
+                self.head.prev = None
+                self.head.next = self.tail
+                self.tail.prev = self.head
+                self.tail.next = None
+
+
+            def __repr__(self):
+                if self.nodeCount == 0:
+                    return 'LinkedList: empty'
+
+                s = ''
+                curr = self.head
+                while curr.next.next:
+                    curr = curr.next
+                    s += repr(curr.data)
+                    if curr.next.next is not None:
+                        s += ' -> '
+                return s
+
+
+            def getLength(self):
+                return self.nodeCount
+
+
+            def traverse(self):
+                result = []
+                curr = self.head
+                while curr.next.next:
+                    curr = curr.next
+                    result.append(curr.data)
+                return result
+
+
+            def reverse(self):
+                result = []
+                curr = self.tail
+                while curr.prev.prev:
+                    curr = curr.prev
+                    result.append(curr.data)
+                return result
+
+
+            def getAt(self, pos):
+                if pos < 0 or pos > self.nodeCount:
+                    return None
+
+                if pos > self.nodeCount // 2:
+                    i = 0
+                    curr = self.tail
+                    while i < self.nodeCount - pos + 1:
+                        curr = curr.prev
+                        i += 1
+                else:
+                    i = 0
+                    curr = self.head
+                    while i < pos:
+                        curr = curr.next
+                        i += 1
+
+                return curr
+
+
+            def insertAfter(self, prev, newNode):
+                next = prev.next
+                newNode.prev = prev
+                newNode.next = next
+                prev.next = newNode
+                next.prev = newNode
+                self.nodeCount += 1
+                return True
+
+
+            def insertAt(self, pos, newNode):
+                if pos < 1 or pos > self.nodeCount + 1:
+                    return False
+
+                prev = self.getAt(pos - 1)
+                return self.insertAfter(prev, newNode)
+
+
+            def popAfter(self, prev):
+                curr = prev.next
+                next = curr.next
+                prev.next = next
+                next.prev = prev
+                self.nodeCount -= 1
+                return curr.data
+
+
+            def popAt(self, pos):
+                if pos < 1 or pos > self.nodeCount:
+                    raise IndexError('Index out of range')
+
+                prev = self.getAt(pos - 1)
+                return self.popAfter(prev)
+
+
+            def concat(self, L):
+                self.tail.prev.next = L.head.next
+                L.head.next.prev = self.tail.prev
+                self.tail = L.tail
+
+                self.nodeCount += L.nodeCount
+
+        # 나의 풀이
+        class LinkedListQueue:
+
+            def __init__(self):
+                self.data = DoublyLinkedList()
+
+            def size(self):
+                return self.data.getLength()
+
+            def isEmpty(self):
+                return self.size()==0
+
+            def enqueue(self, item):
+                node = Node(item)
+                self.data.insertAt(self.size()+1, node)
+
+            def dequeue(self):
+                return self.data.popAt(1)
+
+            def peek(self):
+                return self.data.getAt(1).data
+
+        def solution(x):
+            return 0
+        
+        '''
+        정확성  테스트
+        테스트 1 〉	통과 (0.06ms, 16.7MB)
+        테스트 2 〉	통과 (0.04ms, 16.7MB)
+        테스트 3 〉	통과 (0.06ms, 16.8MB)
+        테스트 4 〉	통과 (0.06ms, 16.8MB)
+        '''
+
+        return JsonResponse({"RESULT": "Sucess"}, status=200)
+    
+    
+class ProgrammersExample15View(View):  
+    def get(self,request):
+        '''
+        # (15) 환형 큐 구현
+
+        ### **문제 설명**
+
+        Python 의 내장 데이터형인 리스트 (list) 를 이용하여 환형 큐의 추상적 자료 구조를 구현한 클래스 `CircularQueue` 를 완성하세요.
+
+        [참고] 함수 `solution()` 은 이 클래스의 구현과는 관계 없는 것이지만, 문제가 올바르게 동작하는 데 필요해서 넣어 둔 것이니 무시해도 좋습니다. 
+        또한, "실행" 을 눌렀을 때 예시 테스트 케이스를 통과한다고 출력되는 것은 아무런 의미가 없습니다.
+        '''
+        class CircularQueue:
+            
+            def __init__(self, n):
+                self.maxCount = n
+                self.data = [None] * n
+                self.count = 0
+                self.front = -1
+                self.rear = -1
+
+
+            def size(self):
+                return self.count
+
+            def isEmpty(self):
+                return self.count == 0
+
+            def isFull(self):
+                return self.count == self.maxCount
+            # 나의 풀이
+            def enqueue(self, x):
+                if self.isFull():
+                    raise IndexError('Queue full')
+                self.rear = (self.rear+1)%self.maxCount
+
+                self.data[self.rear] = x
+                self.count += 1
+
+            # 나의 풀이
+            def dequeue(self):
+                if self.size()==0:
+                    raise IndexError('Queue empty')
+                self.front = (self.front+1)%self.maxCount
+                # front는 첫 원소의 바로 앞을 지칭하기 때문에 먼저 자릿수를 한자리 위로 옮긴 다음 x를 출력해낸다.
+                x = self.data[self.front]
+
+                self.count -= 1
+                return x
+
+            # 나의 풀이
+            def peek(self):
+                if self.isEmpty():
+                    raise IndexError('Queue empty')
+                return self.data[(self.front+1)%self.maxCount]
+                # front는 첫 원소의 바로 앞을 지칭함.
+
+        CQ = CircularQueue(5)
+        
+        return JsonResponse({"RESULT": CQ.peek()}, status=200)
+    
+class ProgrammersExample16View(View):  
+    def get(self,request):
+        '''
+        # (16) 우선순위 큐의 enqueue 연산 구현
+
+        ### **문제 설명**
+
+        앞선 강의에서 소개된 양방향 연결 리스트의 추상적 자료구조 구현인 클래스 `DoublyLinkedList` 를 이용하여 우
+        선순위 큐의 추상적 자료구조인 클래스 `PriorityQueue` 의 구현을 완성하세요.
+
+        코드의 윗부분은 양방향 연결 리스트를 이용하기 위한 클래스 `Node` 와 `DoublyLinikedList` 의 구현입니다. 
+        그대로 둔 채, 아래에 있는 `class PriorityQueue` 의 메서드들 중 `enqueue()` 메서드의 구현을 위한 
+        빈 칸 채우기만 완성하면 됩니다.
+
+        [참고] 함수 `solution()` 은 이 클래스의 구현과는 관계 없는 것이지만, 문제가 올바르게 동작하는 데 필요해서 
+        넣어 둔 것이니 무시해도 좋습니다. 또한, 실행 을 눌렀을 때 예시 테스트 케이스를 통과한다고 출력되는 것은 아무런 
+        의미가 없습니다.
+
+        '''
+        class Node:
+    
+            def __init__(self, item):
+                self.data = item
+                self.prev = None
+                self.next = None
+
+        class DoublyLinkedList:
+
+            def __init__(self):
+                self.nodeCount = 0
+                self.head = Node(None)
+                self.tail = Node(None)
+                self.head.prev = None
+                self.head.next = self.tail
+                self.tail.prev = self.head
+                self.tail.next = None
+
+
+            def __repr__(self):
+                if self.nodeCount == 0:
+                    return 'LinkedList: empty'
+
+                s = ''
+                curr = self.head
+                while curr.next.next:
+                    curr = curr.next
+                    s += repr(curr.data)
+                    if curr.next.next is not None:
+                        s += ' -> '
+                return s
+
+
+            def getLength(self):
+                return self.nodeCount
+
+
+            def traverse(self):
+                result = []
+                curr = self.head
+                while curr.next.next:
+                    curr = curr.next
+                    result.append(curr.data)
+                return result
+
+
+            def reverse(self):
+                result = []
+                curr = self.tail
+                while curr.prev.prev:
+                    curr = curr.prev
+                    result.append(curr.data)
+                return result
+
+
+            def getAt(self, pos):
+                if pos < 0 or pos > self.nodeCount:
+                    return None
+
+                if pos > self.nodeCount // 2:
+                    i = 0
+                    curr = self.tail
+                    while i < self.nodeCount - pos + 1:
+                        curr = curr.prev
+                        i += 1
+                else:
+                    i = 0
+                    curr = self.head
+                    while i < pos:
+                        curr = curr.next
+                        i += 1
+
+                return curr
+
+
+            def insertAfter(self, prev, newNode):
+                next = prev.next
+                newNode.prev = prev
+                newNode.next = next
+                prev.next = newNode
+                next.prev = newNode
+                self.nodeCount += 1
+                return True
+
+
+            def insertAt(self, pos, newNode):
+                if pos < 1 or pos > self.nodeCount + 1:
+                    return False
+
+                prev = self.getAt(pos - 1)
+                return self.insertAfter(prev, newNode)
+
+
+            def popAfter(self, prev):
+                curr = prev.next
+                next = curr.next
+                prev.next = next
+                next.prev = prev
+                self.nodeCount -= 1
+                return curr.data
+
+
+            def popAt(self, pos):
+                if pos < 1 or pos > self.nodeCount:
+                    return None
+
+                prev = self.getAt(pos - 1)
+                return self.popAfter(prev)
+
+
+            def concat(self, L):
+                self.tail.prev.next = L.head.next
+                L.head.next.prev = self.tail.prev
+                self.tail = L.tail
+
+                self.nodeCount += L.nodeCount
+
+
+        class PriorityQueue:
+
+            def __init__(self):
+                self.queue = DoublyLinkedList()
+
+
+            def size(self):
+                return self.queue.getLength()
+
+            def isEmpty(self):
+                return self.size() == 0
+            
+            # 나의 풀이(빈칸채우기)
+            # 주의 할 것, enqueue시 숫자가 낮은 것이 우선이 되도록!!
+            def enqueue(self, x):
+                newNode = Node(x)
+                curr = self.queue.head
+                while curr.next.data != None and x < curr.next.data:
+                    curr = curr.next
+                self.queue.insertAfter(curr, newNode)
+
+            # 주의 할 것, dequeue시 숫자가 낮은 것이 먼저 나오며, 앞이 아니라 뒤에서 나온다!!!!!
+            def dequeue(self):
+                return self.queue.popAt(self.queue.getLength())
+
+            def peek(self):
+                return self.queue.getAt(self.queue.getLength()).data
+
+
+        def solution(x):
+            return 0
+        
+        PQ = PriorityQueue()
+        
+        return JsonResponse({"RESULT": PQ.enqueue(2)}, status=200)
