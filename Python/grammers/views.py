@@ -2696,3 +2696,76 @@ class BinaryTree:
 def solution(x):
     return 0
 
+
+'''
+(19) 이진 트리의 넓이 우선 순회
+문제 설명
+이진 트리를 구현한 클래스인 class BinaryTree 에 대하여 넓이 우선 순회 (breadth first traversal) 를 구현하는 메서드 bft() 를 완성하세요.
+
+class ArrayQueue 는 배열 (python list) 을 이용하여 구현한 큐 (queue) 의 추상적 자료구조입니다. 이것을 이용하여 넓이 우선 순회 알고리즘을 구현하세요.
+
+[참고 1] solution() 함수의 구현은 그대로 두세요. 이것을 없애면 테스트가 되지 않습니다.
+
+[참고 2] "코드 실행" 을 눌렀을 때 통과하는 것은 아무런 의미가 없습니다.
+'''
+class ArrayQueue:
+    
+    def __init__(self):
+        self.data = []
+
+    def size(self):
+        return len(self.data)
+
+    def isEmpty(self):
+        return self.size() == 0
+
+    def enqueue(self, item):
+        self.data.append(item)
+
+    def dequeue(self):
+        return self.data.pop(0)
+
+    def peek(self):
+        return self.data[0]
+
+
+class Node:
+
+    def __init__(self, item):
+        self.data = item
+        self.left = None
+        self.right = None
+
+
+class BinaryTree:
+
+    def __init__(self, r):
+        self.root = r
+
+    #나의 풀이
+    def bft(self):
+        if self.root:
+            traversal =[]
+            q = ArrayQueue()
+            q.enqueue(self.root)
+            while not q.isEmpty():
+                a = q.dequeue()
+                traversal.append(a.data)
+                if a.left:
+                    q.enqueue(a.left)
+                if a.right:
+                    q.enqueue(a.right)
+            return traversal
+        else:    
+            return []
+        
+        '''
+        테스트 1 〉	통과 (0.04ms, 16.6MB)
+        테스트 2 〉	통과 (0.04ms, 16.5MB)
+        테스트 3 〉	통과 (0.04ms, 16.5MB)
+        테스트 4 〉	통과 (0.04ms, 16.5MB)
+        테스트 5 〉	통과 (0.04ms, 16.8MB)
+        '''
+
+def solution(x):
+    return 0
