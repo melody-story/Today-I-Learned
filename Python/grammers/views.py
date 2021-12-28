@@ -2491,3 +2491,677 @@ class ProgrammersExample16View(View):
         PQ = PriorityQueue()
         
         return JsonResponse({"RESULT": PQ.enqueue(2)}, status=200)
+    
+    
+    
+    '''
+    (18-01) 이진트리의 depth() 연산 구현
+    문제 설명
+    이미 주어진 코드 (class Node 와 class BinaryTree 에 의하여) 의 구조를 따르는 이진 트리 (binary tree) 에 대하여, 트리의 깊이 (depth) 를 구하는 연산의 구현을 완성하세요.
+
+    초기 코드에 pass 로만 되어 있는 class Node 의 depth() 메서드와 class BinaryTree 의 depth() 메서드를 구현합니다. 코드의 다른 부분은 수정할 필요가 없습니다.
+
+    참고로 할 수 있도록, 강의에서 소개한 size() 메서드들 (class Node 와 class BinaryTree 에 대해서) 을 그대로 두었습니다. 문제로 주어진 depth() 연산도 매우 비슷한 식으로 구현할 수 있으니 참고로 삼으세요.
+
+    [참고] 실행 을 눌렀을 때 통과하는 것은 아무 의미 없습니다.
+    또한, solution() 함수는 테스트에 영향을 미치므로 수정하지 말고 그대로 두세요.
+    '''
+    class Node:
+    
+        def __init__(self, item):
+            self.data = item
+            self.left = None
+            self.right = None
+
+
+        def size(self):
+            l = self.left.size() if self.left else 0
+            r = self.right.size() if self.right else 0
+            return l + r + 1
+
+
+        # 나의 풀이
+        def depth(self):
+            l = self.left.depth() if self.left else 0
+            r = self.right.depth() if self.right else 0
+            return (l if l >= r else r) + 1
+            
+
+
+    class BinaryTree:
+    
+        def __init__(self, r):
+            self.root = r
+
+        def size(self):
+            if self.root:
+                return self.root.size()
+            else:
+                return 0
+        # 나의 풀이
+        def depth(self):
+            if self.root:
+                return self.root.depth()
+            else:
+                return 0
+            
+        '''
+        테스트 1 〉	통과 (0.05ms, 16.5MB)
+        테스트 2 〉	통과 (0.04ms, 16.4MB)
+        테스트 3 〉	통과 (0.05ms, 16.6MB)
+        테스트 4 〉	통과 (0.04ms, 16.3MB)
+        테스트 5 〉	통과 (0.05ms, 16.3MB)    
+        '''        
+def solution(x):
+    return 0
+
+
+'''
+(18-02) 이진트리의 전위순회 연산 구현
+문제 설명
+이미 주어진 코드 (class Node 와 class BinaryTree 에 의하여) 의 구조를 따르는 이진 트리 (binary tree) 에 대하여, 트리를 전위 순회 (preorder traversal) 하는 연산의 구현을 완성하세요.
+
+초기 코드에 pass 로만 되어 있는 class Node 의 preorder() 메서드와 class BinaryTree 의 preorder() 메서드를 구현합니다. 코드의 다른 부분은 수정할 필요가 없습니다.
+
+참고로 할 수 있도록, 강의에서 소개한 inorder() 메서드들 (class Node 와 class BinaryTree 에 대해서) 을 그대로 두었습니다. 문제로 주어진 preorder() 연산도 매우 비슷한 식으로 구현할 수 있으니 참고로 삼으세요.
+
+[참고] 실행 을 눌렀을 때 통과하는 것은 아무 의미 없습니다.
+또한, solution() 함수는 테스트에 영향을 미치므로 수정하지 말고 그대로 두세요.
+'''
+class Node:
+    
+    def __init__(self, item):
+        self.data = item
+        self.left = None
+        self.right = None
+
+
+    def inorder(self):
+        traversal = []
+        if self.left:
+            traversal += self.left.inorder()
+        traversal.append(self.data)
+        if self.right:
+            traversal += self.right.inorder()
+        return traversal
+
+    # 나의 풀이
+    def preorder(self):
+        traversal = []
+        traversal.append(self.data)
+        if self.left:
+            traversal += self.left.preorder()
+        if self.right:
+            traversal += self.right.preorder()
+        return traversal
+            
+
+
+class BinaryTree:
+
+    def __init__(self, r):
+        self.root = r
+
+
+    def inorder(self):
+        if self.root:
+            return self.root.inorder()
+        else:
+            return []
+
+    #나의 풀이
+    def preorder(self):
+        if self.root:
+            return self.root.preorder()
+        else:
+            return [] 
+    '''
+    테스트 1 〉	통과 (0.03ms, 16.6MB)
+    테스트 2 〉	통과 (0.04ms, 16.6MB)
+    테스트 3 〉	통과 (0.04ms, 16.5MB)
+    테스트 4 〉	통과 (0.04ms, 16.5MB)
+    테스트 5 〉	통과 (0.04ms, 16.5MB)
+    '''
+
+def solution(x):
+    return 0
+
+
+'''
+(18-03) 이진트리의 후위순회 연산 구현
+문제 설명
+이미 주어진 코드 (class Node 와 class BinaryTree 에 의하여) 의 구조를 따르는 이진 트리 (binary tree) 에 대하여, 트리를 후위 순회 (postorder traversal) 하는 연산의 구현을 완성하세요.
+
+초기 코드에 pass 로만 되어 있는 class Node 의 postorder() 메서드와 class BinaryTree 의 postorder() 메서드를 구현합니다. 코드의 다른 부분은 수정할 필요가 없습니다.
+
+참고로 할 수 있도록, 강의에서 소개한 inorder() 메서드들 (class Node 와 class BinaryTree 에 대해서) 을 그대로 두었습니다. 문제로 주어진 postorder() 연산도 매우 비슷한 식으로 구현할 수 있으니 참고로 삼으세요.
+
+[참고] 실행 을 눌렀을 때 통과하는 것은 아무 의미 없습니다.
+또한, solution() 함수는 테스트에 영향을 미치므로 수정하지 말고 그대로 두세요.
+'''
+class Node:
+    
+    def __init__(self, item):
+        self.data = item
+        self.left = None
+        self.right = None
+
+
+    def inorder(self):
+        traversal = []
+        if self.left:
+            traversal += self.left.inorder()
+        traversal.append(self.data)
+        if self.right:
+            traversal += self.right.inorder()
+        return traversal
+
+
+    def postorder(self):
+        traversal=[]
+        if self.left:
+            traversal += self.left.postorder()
+        if self.right:
+            traversal += self.right.postorder()
+        traversal.append(self.data)
+        return traversal
+            
+
+
+class BinaryTree:
+
+    def __init__(self, r):
+        self.root = r
+
+
+    def inorder(self):
+        if self.root:
+            return self.root.inorder()
+        else:
+            return []
+
+
+    def postorder(self):
+        if self.root:
+            return self.root.postorder()
+        else:
+            return []
+        '''
+        테스트 1 〉	통과 (0.08ms, 16.6MB)
+        테스트 2 〉	통과 (0.05ms, 16.6MB)
+        테스트 3 〉	통과 (0.05ms, 16.8MB)
+        테스트 4 〉	통과 (0.04ms, 16.6MB)
+        테스트 5 〉	통과 (0.06ms, 16.6MB)
+        '''
+def solution(x):
+    return 0
+
+
+'''
+(19) 이진 트리의 넓이 우선 순회
+문제 설명
+이진 트리를 구현한 클래스인 class BinaryTree 에 대하여 넓이 우선 순회 (breadth first traversal) 를 구현하는 메서드 bft() 를 완성하세요.
+
+class ArrayQueue 는 배열 (python list) 을 이용하여 구현한 큐 (queue) 의 추상적 자료구조입니다. 이것을 이용하여 넓이 우선 순회 알고리즘을 구현하세요.
+
+[참고 1] solution() 함수의 구현은 그대로 두세요. 이것을 없애면 테스트가 되지 않습니다.
+
+[참고 2] "코드 실행" 을 눌렀을 때 통과하는 것은 아무런 의미가 없습니다.
+'''
+class ArrayQueue:
+    
+    def __init__(self):
+        self.data = []
+
+    def size(self):
+        return len(self.data)
+
+    def isEmpty(self):
+        return self.size() == 0
+
+    def enqueue(self, item):
+        self.data.append(item)
+
+    def dequeue(self):
+        return self.data.pop(0)
+
+    def peek(self):
+        return self.data[0]
+
+
+class Node:
+
+    def __init__(self, item):
+        self.data = item
+        self.left = None
+        self.right = None
+
+
+class BinaryTree:
+
+    def __init__(self, r):
+        self.root = r
+
+    #나의 풀이
+    def bft(self):
+        if self.root:
+            traversal =[]
+            q = ArrayQueue()
+            q.enqueue(self.root)
+            while not q.isEmpty():
+                a = q.dequeue()
+                traversal.append(a.data)
+                if a.left:
+                    q.enqueue(a.left)
+                if a.right:
+                    q.enqueue(a.right)
+            return traversal
+        else:    
+            return []
+        
+        '''
+        테스트 1 〉	통과 (0.04ms, 16.6MB)
+        테스트 2 〉	통과 (0.04ms, 16.5MB)
+        테스트 3 〉	통과 (0.04ms, 16.5MB)
+        테스트 4 〉	통과 (0.04ms, 16.5MB)
+        테스트 5 〉	통과 (0.04ms, 16.8MB)
+        '''
+
+def solution(x):
+    return 0
+
+
+
+'''
+(20) 이진 탐색 트리의 원소 삽입 연산 구현
+문제 설명
+초기 코드에 주어진 class Node 와 class BinSearchTree 를 기반으로, 이진 탐색 트리 (binary search tree) 에 새로운 원소를 삽입하는 insert(key, data) 연산의 구현을 완성하세요.
+
+class BinSearchTree 에는 이미 insert(key, data) 메서드가 구현되어 있습니다. 이것을 그대로 이용하고, class Node 의 insert(key, data) 메서드를 재귀적 방법으로 구현하세요. 강의에서 언급한 바와 같이, 이미 트리 안에 들어 있는 것과 같은 (중복된) 키를 이용하여 삽입을 시도하는 경우에는 KeyError 예외를 발생시켜야 합니다.
+
+[참고 1] inorder() 메서드의 구현은 그대로 두세요. 테스트에 이용됩니다.
+
+[참고 2] solution() 함수의 구현도 그대로 두세요. 이것을 없애면 테스트가 되지 않습니다.
+
+[참고 3] "코드 실행" 을 눌렀을 때 통과하는 것은 아무런 의미가 없습니다.
+'''
+class Node:
+    
+    def __init__(self, key, data):
+        self.key = key
+        self.data = data
+        self.left = None
+        self.right = None
+
+    # 나의 풀이
+    def insert(self, key, data):
+        if key < self.key:
+            if self.left:
+                self.left.insert(key,data)
+            else:
+                self.left = Node(key,data)
+        
+        elif key > self.key:
+            if self.right:
+                self.right.insert(key,data)
+            else: 
+                self.right = Node(key,data)       
+        else:
+            raise KeyError("")
+
+    def inorder(self):
+        traversal = []
+        if self.left:
+            traversal += self.left.inorder()
+        traversal.append(self)
+        if self.right:
+            traversal += self.right.inorder()
+        return traversal
+
+
+class BinSearchTree:
+
+    def __init__(self):
+        self.root = None
+
+
+    def insert(self, key, data):
+        if self.root:
+            self.root.insert(key, data)
+        else:
+            self.root = Node(key, data)
+
+
+    def inorder(self):
+        if self.root:
+            return self.root.inorder()
+        else:
+            return []
+
+
+def solution(x):
+    return 0
+
+
+
+'''
+(21) 이진 탐색 트리에서 노드의 삭제 연산 구현
+문제 설명
+초기 코드에 주어진 class Node 와 class BinSearchTree 를 기반으로, 이진 탐색 트리 (binary search tree) 에서 지정된 원소를 삭제하는 remove(key) 연산의 구현을 완성하세요.
+
+class Node 와 class BinSearchTree 에 이미 구현되어 있는 코드는 수정하지 마세요. 코드 구현의 정확성 평가에 이용됩니다. 초기 코드에 들어 있는 주석을 참고로 하여, BinSearchTree::remove() 메서드의 안에 들어 있는 pass 를 없애고 그 자리에 올바른 코드를 써 넣으면 됩니다.
+
+[참고 1] solution() 함수의 구현은 그대로 두세요. 이것을 없애면 테스트가 되지 않습니다.
+
+[참고 2] "코드 실행" 을 눌렀을 때 통과하는 것은 아무런 의미가 없습니다.
+
+[참고 3] 잘 생각해 보면, 이진 탐색 트리를 구현하지 않고 키 순서대로 정렬된 Python 의 배열을 유지함으로써도 같은 연산을 구현할 수 있습니다. 
+        이 연습문제에서는 효율성 테스트를 하지 않기 때문에 이러한 구현을 오답으로 간주하지 않습니다만, 배열을 이용한 구현과 트리 구조를 이용한 구현은 연산의 복잡도에 큰 차이가 있습니다. 
+        이진 탐색 트리로 구현하여 코드 작성 연습을 하시기 바랍니다.
+'''
+
+class Node:
+    
+    def __init__(self, key, data):
+        self.key = key
+        self.data = data
+        self.left = None
+        self.right = None
+
+
+    def insert(self, key, data):
+        if key < self.key:
+            if self.left:
+                self.left.insert(key, data)
+            else:
+                self.left = Node(key, data)
+        elif key > self.key:
+            if self.right:
+                self.right.insert(key, data)
+            else:
+                self.right = Node(key, data)
+        else:
+            raise KeyError('Key %s already exists.' % key)
+
+
+    def lookup(self, key, parent=None):
+        if key < self.key:
+            if self.left:
+                return self.left.lookup(key, self)
+            else:
+                return None, None
+        elif key > self.key:
+            if self.right:
+                return self.right.lookup(key, self)
+            else:
+                return None, None
+        else:
+            return self, parent
+
+
+    def inorder(self):
+        traversal = []
+        if self.left:
+            traversal += self.left.inorder()
+        traversal.append(self)
+        if self.right:
+            traversal += self.right.inorder()
+        return traversal
+
+
+    def countChildren(self):
+        count = 0
+        if self.left:
+            count += 1
+        if self.right:
+            count += 1
+        return count
+
+
+class BinSearchTree:
+
+    def __init__(self):
+        self.root = None
+
+
+    def insert(self, key, data):
+        if self.root:
+            self.root.insert(key, data)
+        else:
+            self.root = Node(key, data)
+
+
+    def lookup(self, key):
+        if self.root:
+            return self.root.lookup(key)
+        else:
+            return None, None
+
+
+    def remove(self, key):
+        node, parent = self.lookup(key)
+        if node:
+            nChildren = node.countChildren()
+            # The simplest case of no children
+            if nChildren == 0:
+                # 만약 parent 가 있으면
+                if parent:
+                    if parent.left.key == node.key:
+                        parent.left = None
+                    else:
+                        parent.right = None
+                # node 가 왼쪽 자식인지 오른쪽 자식인지 판단하여
+                # parent.left 또는 parent.right 를 None 으로 하여
+                # leaf node 였던 자식을 트리에서 끊어내어 없앱니다.
+                
+                # 만약 parent 가 없으면 (node 는 root 인 경우)
+                # self.root 를 None 으로 하여 빈 트리로 만듭니다.
+                else:
+                    self.root = None
+            # When the node has only one child
+            elif nChildren == 1:
+                # 하나 있는 자식이 왼쪽인지 오른쪽인지를 판단하여
+                # 그 자식을 어떤 변수가 가리키도록 합니다.
+                if node.left:
+                    s = node.left
+                else:
+                    s = node.right
+                # 만약 parent 가 있으면
+                # node 가 왼쪽 자식인지 오른쪽 자식인지 판단하여
+                # 위에서 가리킨 자식을 대신 node 의 자리에 넣습니다.
+                if parent:
+                    if parent.left.key == node.key:
+                        parent.left = s
+                        s = None
+                    else:
+                        parent.right = s
+                        s = None
+                # 만약 parent 가 없으면 (node 는 root 인 경우)
+                # self.root 에 위에서 가리킨 자식을 대신 넣습니다.
+                else:
+                    self.root = s
+            # When the node has both left and right children
+            else:
+                # 1차 풀이(오답)
+                parent = node.right
+                s = parent.left
+                while s.left:
+                    parent = s
+                    s = s.left
+                node.key = s.key
+                node.data = s.data
+                if s.right:
+                    parent.left = s.right
+                if s.countChilde() == 0:
+                    parent.left = None
+                    
+                '''
+                테스트 1 〉	통과 (0.07ms, 16.8MB)
+                테스트 2 〉	통과 (0.04ms, 16.7MB)
+                테스트 3 〉	통과 (0.07ms, 16.7MB)
+                테스트 4 〉	통과 (0.06ms, 16.7MB)
+                테스트 5 〉	실패 (런타임 에러)
+                테스트 6 〉	실패 (런타임 에러)
+                테스트 7 〉	통과 (0.06ms, 16.9MB)
+                테스트 8 〉	실패 (런타임 에러)
+                테스트 9 〉	실패 (런타임 에러)
+                '''
+                    
+                    
+                # 2차 풀이(정답)
+                s = node.right
+                parent = node
+                while s.left:
+                    parent = s
+                    s = parent.left
+                    
+                node.key = s.key
+                node.data = s.data
+                
+                if parent.right == s: # node 가 곧 parent인 경우, s의 child가 left 가 없는 경우  
+                    parent.right = s.right                   
+                if parent.left == s:
+                    parent.left = s.right
+                    
+                '''
+                테스트 1 〉	통과 (0.13ms, 16.8MB)
+                테스트 2 〉	통과 (0.04ms, 16.7MB)
+                테스트 3 〉	통과 (0.07ms, 16.7MB)
+                테스트 4 〉	통과 (0.06ms, 16.8MB)
+                테스트 5 〉	통과 (0.06ms, 16.8MB)
+                테스트 6 〉	통과 (0.06ms, 16.7MB)
+                테스트 7 〉	통과 (0.06ms, 16.8MB)
+                테스트 8 〉	통과 (0.06ms, 16.7MB)
+                테스트 9 〉	통과 (0.07ms, 16.7MB)
+                '''
+
+            return True
+
+        else:
+            return False
+
+
+    def inorder(self):
+        if self.root:
+            return self.root.inorder()
+        else:
+            return []
+
+
+def solution(x):
+    return 0
+
+
+
+'''
+(22) 최대 힙에 새로운 원소 삽입
+문제 설명
+초기 코드에 주어진 class MaxHeap 에 최대 힙에 새로운 원소를 추가하는 연산인 insert() 메서드의 구현을 완성하세요.
+
+[참고 1] solution() 함수의 구현은 그대로 두세요. 이것을 없애면 테스트가 되지 않습니다.
+
+[참고 2] "코드 실행" 을 눌렀을 때 통과하는 것은 아무런 의미가 없습니다.
+'''
+class MaxHeap:
+    
+    def __init__(self):
+        self.data = [None]
+
+
+    def insert(self, item):
+        # 나의 풀이
+        a = self.data
+        a.append(item)
+        itemIndex       = a.index(item)
+        
+        while itemIndex != 1:
+            parentIndex     = itemIndex // 2
+            if a[itemIndex] > a[parentIndex]:
+                a[itemIndex], a[parentIndex] = a[parentIndex], a[itemIndex]
+                itemIndex, parentIndex = itemIndex, parentIndex 
+                itemIndex     = itemIndex // 2
+            else:
+                break
+            
+            '''
+            테스트 1 〉	통과 (0.06ms, 16.5MB)
+            '''
+     
+        # 다른 풀이        
+        self.data.append(item)
+        i = len(self.data) - 1
+        while i != 1:
+            if self.data[i] > self.data[(i // 2)]:
+                self.data[i], self.data[(i // 2)] = self.data[(i // 2)], self.data[i]
+                i = i // 2
+            else:
+                break
+
+def solution(x):
+    return 0
+
+
+
+'''
+(23) 최대 힙에서의 원소 삭제
+문제 설명
+초기 코드에 여기 저기 포함된 빈 칸을 채움으로써 class MaxHeap 의 메서드인 maxHeapify() 의 구현을 완성하세요. 이것은 이미 주어져 있는 remove() 메서드와 연결되어 최대 힙에서의 원소 삭제 연산을 구성합니다.
+
+[참고 1] remove() 메서드의 내용은 이미 주어져 있으므로 수정하지 않는 쪽이 좋습니다.
+
+[참고 2] solution() 함수의 구현은 그대로 두세요. 이것을 없애면 테스트가 되지 않습니다.
+
+[참고 3] "코드 실행" 을 눌렀을 때 통과하는 것은 아무런 의미가 없습니다.
+'''
+class MaxHeap:
+
+    def __init__(self):
+        self.data = [None]
+
+
+    def remove(self):
+        if len(self.data) > 1:
+            self.data[1], self.data[-1] = self.data[-1], self.data[1]
+            data = self.data.pop(-1)
+            self.maxHeapify(1)
+        else:
+            data = None
+        return data
+
+    # 나의 풀이
+    def maxHeapify(self, i):
+        # 왼쪽 자식 (left child) 의 인덱스를 계산합니다.
+        left = 2*i
+
+        # 오른쪽 자식 (right child) 의 인덱스를 계산합니다.
+        right = 2*i +1
+
+        smallest = i
+        # 왼쪽 자식이 존재하는지, 그리고 왼쪽 자식의 (키) 값이 (무엇보다?) 더 큰지를 판단합니다.
+        if left < len(self.data) and self.data[left] > self.data[i]:
+            # 조건이 만족하는 경우, smallest 는 왼쪽 자식의 인덱스를 가집니다.
+            
+            smallest = left
+
+        # 오른쪽 자식이 존재하는지, 그리고 오른쪽 자식의 (키) 값이 (무엇보다?) 더 큰지를 판단합니다.
+        if right < len(self.data) and self.data[right] > self.data[smallest]: 
+            #### ⭐️⭐️ i, right, left 셋 중 최대값(smallest)을 찾는 것인데 처음에 self.data[right] > self.data[i]로 작성했다가 엄청 해맸다...
+            ## 출제자 분이 최대값의 변수 명을 great가 아닌 smallest로 지정해놓으셔서 더 헷갈린 것도 있었던 것 같다. 
+                        
+            # 조건이 만족하는 경우, smallest 는 오른쪽 자식의 인덱스를 가집니다.
+            smallest = right
+
+        if smallest != i:
+            # 현재 노드 (인덱스 i) 와 최댓값 노드 (왼쪽 아니면 오른쪽 자식) 를 교체합니다.
+            self.data[i], self.data[smallest] = self.data[smallest], self.data[i]
+
+            # 재귀적 호출을 이용하여 최대 힙의 성질을 만족할 때까지 트리를 정리합니다.
+            self.maxHeapify(smallest)
+            
+    '''
+    테스트 1 〉	통과 (0.06ms, 16.8MB)
+    '''
+
+
+def solution(x):
+    return 0
