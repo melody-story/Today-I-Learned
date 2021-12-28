@@ -3050,3 +3050,52 @@ class BinSearchTree:
 
 def solution(x):
     return 0
+
+
+
+'''
+(22) 최대 힙에 새로운 원소 삽입
+문제 설명
+초기 코드에 주어진 class MaxHeap 에 최대 힙에 새로운 원소를 추가하는 연산인 insert() 메서드의 구현을 완성하세요.
+
+[참고 1] solution() 함수의 구현은 그대로 두세요. 이것을 없애면 테스트가 되지 않습니다.
+
+[참고 2] "코드 실행" 을 눌렀을 때 통과하는 것은 아무런 의미가 없습니다.
+'''
+class MaxHeap:
+    
+    def __init__(self):
+        self.data = [None]
+
+
+    def insert(self, item):
+        # 나의 풀이
+        a = self.data
+        a.append(item)
+        itemIndex       = a.index(item)
+        
+        while itemIndex != 1:
+            parentIndex     = itemIndex // 2
+            if a[itemIndex] > a[parentIndex]:
+                a[itemIndex], a[parentIndex] = a[parentIndex], a[itemIndex]
+                itemIndex, parentIndex = itemIndex, parentIndex 
+                itemIndex     = itemIndex // 2
+            else:
+                break
+            
+            '''
+            테스트 1 〉	통과 (0.06ms, 16.5MB)
+            '''
+     
+        # 다른 풀이        
+        self.data.append(item)
+        i = len(self.data) - 1
+        while i != 1:
+            if self.data[i] > self.data[(i // 2)]:
+                self.data[i], self.data[(i // 2)] = self.data[(i // 2)], self.data[i]
+                i = i // 2
+            else:
+                break
+
+def solution(x):
+    return 0
