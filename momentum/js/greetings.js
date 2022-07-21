@@ -21,11 +21,10 @@ const savedUsername = localStorage.getItem(USERNAME_KEY)
 console.log(savedUsername);
 
 if (savedUsername === null) {
-    // savedUsername이 null이면 form 보이게
+		// savedUsername이 null이면 form 보이게
     loginForm.classList.remove(HIDDEN_CLASSNAME)
-    loginForm.addEventListener("submit", onLoginSubmit);
-    
+    loginForm.addEventListener("submit", onLoginSubmit);    
 } else {
-    // savedUsername이 있으면, h1이 나타나도록!
+		// savedUsername이 있으면, h1이 나타나도록!
     paintGreeting(savedUsername)  
 }
